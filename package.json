@@ -1,0 +1,24 @@
+{
+  "name": "gulp-less-branding-js",
+  "version": "0.0.1",
+  "description": "Gulp plugin to compile a branding .less file into a branding .js for theming client-side charting or animations.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gulpplugin"
+  ],
+  "author": "Matt Gibbs",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "accord": "0.20.1",
+    "gulp-util": "3.0.6",
+    "less": "2.5.1",
+    "through2": "^2.0.0"
+  },
+  "devDependencies": {
+    "mocha": "2.3.2"
+  }
+}
