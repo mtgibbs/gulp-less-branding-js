@@ -31,9 +31,11 @@ describe('gulp-less-branding-js', function () {
                 should.exist(output.relative);
                 should.exist(output.contents);
 
-                String(output.contents).should.equal(
-                    fs.readFileSync(path.join(__dirname, 'expect/_branding.js'), 'utf8')
-                );
+                // clean new line characters for windows compat
+                var singleLineContents = output.contents.toString().replace(/\r?\n/g, '');
+                var expected = fs.readFileSync(path.join(__dirname, 'expect/_branding.js'), 'utf8').replace(/\r?\n/g, '');
+
+                String(singleLineContents).should.equal(expected);
 
                 done();
             });
