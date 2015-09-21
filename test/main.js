@@ -24,7 +24,7 @@ describe('gulp-less-branding-js', function () {
 
             var stream = brandingToJS();
             stream.once('data', function (output) {
-                console.log(output);
+
 
                 done();
             });
