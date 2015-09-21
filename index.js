@@ -31,40 +31,45 @@ module.exports = function (options) {
             contentsStr = contentsStr.concat(clazz);
         });
 
-        console.log(contentsStr);
-
         var opts = {filename: file.path, compress: false};
         less.render(contentsStr, opts).then(function (res) {
 
-            var compiledCss = res.result;
-            var ast = css.parse(compiledCss);
+            var ast = css.parse(res.result);
 
+            var colorKvps = ast.stylesheet.rules
+                .filter(function (rule) {
+                    // This line is ballsy and stupid
+                    // but for the sake of proving this out I'm leaving it for now and will fix later
+                    // TODO: Fix this
+                    var name = rule.selectors[0].slice(1);
 
-            // TODO: pull out all of the rules with selectors that match the variable names
+                    return rule.type === 'rule' && variables.indexOf(name) > -1;
+                })
+                .map(function (rule) {
+                    var colorDecs = rule.declarations.filter(function (declaration) {
+                        return declaration.property === 'color';
+                    });
 
-            var rules = ast.stylesheet.rules.filter(function (rule) {
-                // This line is ballsy and stupid
-                // but for the sake of proving this out I'm leaving it for now and will fix later
-                // TODO: Fix this
-                var name = rule.selectors[0].slice(1);
+                    if (colorDecs && colorDecs.length > 0) {
+                        var color = colorDecs[0].value;
 
-                return rule.type === 'rule' && variables.indexOf(name) > -1;
-            });
-
-            // TODO: now pull out the color declaration and save it
-
-            rules.forEach(function (rule) {
-                var colorDecs = rule.declarations.filter(function (declaration) {
-                    return declaration.property === 'color';
+                        return {
+                            // TODO: And here it is again!
+                            key: rule.selectors[0].slice(1),
+                            value: color
+                        }
+                    }
                 });
 
-                if (colorDecs && colorDecs.length > 0) {
-                    var color = colorDecs[0].value;
 
-                }
+            var colorResource = {};
+
+            colorKvps.forEach(function (kvp) {
+                colorResource[kvp.key] = kvp.value;
             });
 
-            //file.contents = new Buffer(res.result);
+            console.log(JSON.stringify(colorResource));
+
             file.contents = new Buffer('TODO PUT THE STUFF BACK!')
 
 
