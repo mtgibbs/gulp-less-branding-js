@@ -3,12 +3,14 @@ var accord = require('accord');
 var gutil = require('gulp-util');
 var through2 = require('through2');
 var css = require('css');
+var changeCase = require('change-case');
 
 var PluginError = gutil.PluginError;
 var less = accord.load('less');
 
+// TODO: support naming the resource variable in options
 module.exports = function (options) {
-
+    
     return through2.obj(function (file, enc, callback) {
 
         if (file.isNull()) {
@@ -26,7 +28,7 @@ module.exports = function (options) {
         });
 
         variables.forEach(function (variable) {
-            // TODO: class these with 'gulp-less-branding-' or something to stop it from colliding with existing things
+            // TODO: class these with '.gulp-less-branding' or something to stop it from colliding with existing things
             var clazz = ['.', variable, ' { color: @', variable, '; }\r\n'].join('');
             contentsStr = contentsStr.concat(clazz);
         });
@@ -61,17 +63,17 @@ module.exports = function (options) {
                     }
                 });
 
-
             var colorResource = {};
 
             colorKvps.forEach(function (kvp) {
-                colorResource[kvp.key] = kvp.value;
+                colorResource[changeCase.camel(kvp.key)] = kvp.value;
             });
 
-            console.log(JSON.stringify(colorResource));
+            var result = ['var ', ]
+
+            console.log(JSON.stringify(colorResource, null, 4));
 
             file.contents = new Buffer('TODO PUT THE STUFF BACK!')
-
 
             return file;
         }).then(function (file) {
