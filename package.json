@@ -4,7 +4,11 @@
   "description": "Gulp plugin to compile a branding .less file into a branding .js for theming client-side charting or animations.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/.bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mtgibbs/gulp-less-branding-js.git"
   },
   "keywords": [
     "gulpplugin"
