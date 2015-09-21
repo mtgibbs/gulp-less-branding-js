@@ -25,6 +25,15 @@ describe('gulp-less-branding-js', function () {
             var stream = brandingToJS();
             stream.once('data', function (output) {
 
+                //console.log(output);
+                should.exist(output);
+                should.exist(output.path);
+                should.exist(output.relative);
+                should.exist(output.contents);
+
+                String(output.contents).should.equal(
+                    fs.readFileSync(path.join(__dirname, 'expect/_branding.js'), 'utf8')
+                );
 
                 done();
             });
