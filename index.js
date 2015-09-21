@@ -9,6 +9,7 @@ var less = accord.load('less');
 module.exports = function (options) {
 
     return through2.obj(function (file, enc, callback) {
+
         if (file.isNull()) {
             return callback(null, file);
         }
@@ -18,11 +19,26 @@ module.exports = function (options) {
         }
 
         // regex for pulling out variables to make holder classes for them
+        // curse you javascript for not supporting look-behind!
         // (?<=@)([A-Za-z0-9\-\_]+)(?=:)
+
+        var variableRegex = /(@[A-Za-z0-9\-_]+)(?=:)/g;
 
         var contentsStr = file.contents.toString();
 
-        RegExp
+        var variables = contentsStr.match(variableRegex);
+
+        console.log(variables.length);
+
+        variables.forEach(function (variable) {
+            variable = variable.slice(1);
+            var clazz = ['.', variable, ' { color: @', variable, '; }'].join('');
+            console.log(clazz);
+            contentsStr = contentsStr.concat(clazz);
+        });
+
+
+        return file;
     });
 
 }
