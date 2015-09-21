@@ -1,10 +1,15 @@
-#gulp-less-branding-js
+gulp-less-branding-js
+======
+
+[![NPM Version](https://img.shields.io/npm/v/gulp-less.svg)](https://www.npmjs.com/package/gulp-less-branding-js)
 
 Gulp plugin to convert variables defined in .less files into javascript variables for use in client-side charting libraries or anything that is hard to actually style in css.
 
 ## Installation
 
-(Incomplete)
+```
+npm install gulp-less-branding-js
+```
 
 ## Usage
 
@@ -58,4 +63,7 @@ Then just pipe the output into your minification/bundling workflow to be used as
 
 MIT
 
-######Special thanks to the guys and girls over at plus3network for giving me something to work from. https://github.com/plus3network/gulp-less
+
+===
+
+Special thanks to the guys and girls over at plus3network for giving me something to work from. https://github.com/plus3network/gulp-less
