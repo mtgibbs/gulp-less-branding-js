@@ -56,7 +56,6 @@ Then just pipe the output into your minification/bundling workflow to be used as
 
 - Better class collision detection. (All classes generated under the hood need to have a parent class to prevent variable name classes from colliding with existing classes defined in the .less file.
 - An option to just output a .json file to be required into something that you're using (not sure the use case for this, but it sounds alright)
-- Actually put this thing in NPM?
 - Flesh out test cases.
 
 ## License
