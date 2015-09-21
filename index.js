@@ -72,11 +72,10 @@ module.exports = function (options) {
                 colorResource[changeCase.camel(kvp.key)] = kvp.value;
             });
 
-            var result = ['var ', ]
+            var name = changeCase.camel(path.basename(opts.filename).replace(/\..+$/, ''));
+            var result = ['var ', name, 'Resource = ', JSON.stringify(colorResource, null, 4), ';'].join('');
 
-            console.log(JSON.stringify(colorResource, null, 4));
-
-            file.contents = new Buffer('TODO PUT THE STUFF BACK!')
+            file.contents = new Buffer(result);
 
             return file;
         }).then(function (file) {
