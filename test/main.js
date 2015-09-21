@@ -1,5 +1,5 @@
 var should = require('should');
-var less = require('../');
+var brandingToJS = require('../');
 var gutil = require('gulp-util');
 var fs = require('fs');
 var path = require('path');
@@ -20,7 +20,16 @@ describe('gulp-less-branding-js', function () {
     describe('brandingToJS()', function () {
 
         it('should compile a _branding.less to _branding.js', function (done) {
-           var brandingFile = createVinyl('')
+            var brandingFile = createVinyl('_branding.less');
+
+            var stream = brandingToJS();
+            stream.once('data', function (output) {
+                console.log(output);
+
+                done();
+            });
+            stream.write(brandingFile);
+            stream.end();
         });
     });
 });
