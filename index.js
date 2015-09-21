@@ -25,8 +25,8 @@ module.exports = function (options) {
             return obj.slice(1);
         });
 
-
         variables.forEach(function (variable) {
+            // TODO: class these with 'gulp-less-branding-' or something to stop it from colliding with existing things
             var clazz = ['.', variable, ' { color: @', variable, '; }\r\n'].join('');
             contentsStr = contentsStr.concat(clazz);
         });
@@ -36,11 +36,36 @@ module.exports = function (options) {
         var opts = {filename: file.path, compress: false};
         less.render(contentsStr, opts).then(function (res) {
 
-            var compiledCss = new Buffer(res.result);
+            var compiledCss = res.result;
             var ast = css.parse(compiledCss);
 
 
-            file.contents = new Buffer(res.result);
+            // TODO: pull out all of the rules with selectors that match the variable names
+
+            var rules = ast.stylesheet.rules.filter(function (rule) {
+                // This line is ballsy and stupid
+                // but for the sake of proving this out I'm leaving it for now and will fix later
+                // TODO: Fix this
+                var name = rule.selectors[0].slice(1);
+
+                return rule.type === 'rule' && variables.indexOf(name) > -1;
+            });
+
+            // TODO: now pull out the color declaration and save it
+
+            rules.forEach(function (rule) {
+                var colorDecs = rule.declarations.filter(function (declaration) {
+                    return declaration.property === 'color';
+                });
+
+                if (colorDecs && colorDecs.length > 0) {
+                    var color = colorDecs[0].value;
+
+                }
+            });
+
+            //file.contents = new Buffer(res.result);
+            file.contents = new Buffer('TODO PUT THE STUFF BACK!')
 
 
             return file;
