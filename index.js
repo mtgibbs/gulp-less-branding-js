@@ -8,9 +8,12 @@ var changeCase = require('change-case');
 var PluginError = gutil.PluginError;
 var less = accord.load('less');
 
-// TODO: support naming the resource variable in options
+// TODO: support choosing between a .js or .json format
+// One you can just load as global variables
+// One you can require into your scripts
+// I suppose it depends on how you want to handle it
 module.exports = function (options) {
-    
+
     return through2.obj(function (file, enc, callback) {
 
         if (file.isNull()) {
