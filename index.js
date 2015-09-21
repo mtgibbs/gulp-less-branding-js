@@ -39,6 +39,7 @@ module.exports = function (options) {
         var opts = {filename: file.path, compress: false};
         less.render(contentsStr, opts).then(function (res) {
 
+            var filename = path.basename(opts.filename).replace(/\..+$/, '');
             var ast = css.parse(res.result);
 
             var colorKvps = ast.stylesheet.rules
@@ -67,15 +68,18 @@ module.exports = function (options) {
                 });
 
             var colorResource = {};
-
             colorKvps.forEach(function (kvp) {
                 colorResource[changeCase.camel(kvp.key)] = kvp.value;
             });
 
-            var name = changeCase.camel(path.basename(opts.filename).replace(/\..+$/, ''));
+            var name = changeCase.camel(filename);
             var result = ['var ', name, 'Resource = ', JSON.stringify(colorResource, null, 4), ';'].join('');
 
             file.contents = new Buffer(result);
+
+            // TODO: Maybe we can have an option that let's you output to .ts?
+            // though you could just do a file manipulation on it after the task is complete to complete that
+            file.path = gutil.replaceExtension(file.path, '.js');
 
             return file;
         }).then(function (file) {
