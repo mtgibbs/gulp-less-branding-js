@@ -134,7 +134,7 @@ describe('gulp-less-branding-js', function () {
 
                 // clean new line characters for windows compat
                 var singleLineContents = output.contents.toString().replace(/\r?\n/g, '');
-                var expected = fs.readFileSync(path.join(__dirname, 'expect/_branding.ts'), 'utf8').replace(/\r?\n/g, '');
+                var expected = fs.readFileSync(path.join(__dirname, 'expect/_branding.coffee'), 'utf8').replace(/\r?\n/g, '');
 
                 String(singleLineContents).should.equal(expected);
 
