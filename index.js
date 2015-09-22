@@ -28,7 +28,8 @@ module.exports = function (options) {
 
         var contentsStr = file.contents.toString();
 
-        contentsStr = contentsStr.replace(/\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\//g, '');
+        // replace all comments with empty string
+        contentsStr = contentsStr.replace(/(\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/)|(\/\/.*)/g, '');
 
         var variableRegex = /(@[A-Za-z0-9\-_]+)(?=:)/g;
         var variables = contentsStr.match(variableRegex).map(function (obj) {
