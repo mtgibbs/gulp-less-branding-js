@@ -1,0 +1,3 @@
+var hasCommentsResource = {
+    "red": "red"
+};
