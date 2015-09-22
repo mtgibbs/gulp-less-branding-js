@@ -16,6 +16,7 @@ function createVinyl(brandingFileName, contents) {
     });
 }
 
+
 describe('gulp-less-branding-js', function () {
     describe('brandingToJS()', function () {
 
@@ -58,6 +59,30 @@ describe('gulp-less-branding-js', function () {
                 // clean new line characters for windows compat
                 var singleLineContents = output.contents.toString().replace(/\r?\n/g, '');
                 var expected = fs.readFileSync(path.join(__dirname, 'expect/_hasComments.js'), 'utf8').replace(/\r?\n/g, '');
+
+                String(singleLineContents).should.equal(expected);
+
+                done();
+            });
+            stream.write(brandingFile);
+            stream.end();
+        });
+
+        it('should compile a .less with variable names that match class names', function (done) {
+            var brandingFile = createVinyl('_hasExistingClass.less');
+
+            var stream = brandingToJS();
+            stream.once('data', function (output) {
+
+                //console.log(output);
+                should.exist(output);
+                should.exist(output.path);
+                should.exist(output.relative);
+                should.exist(output.contents);
+
+                // clean new line characters for windows compat
+                var singleLineContents = output.contents.toString().replace(/\r?\n/g, '');
+                var expected = fs.readFileSync(path.join(__dirname, 'expect/_hasExistingClass.js'), 'utf8').replace(/\r?\n/g, '');
 
                 String(singleLineContents).should.equal(expected);
 
