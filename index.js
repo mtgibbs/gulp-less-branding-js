@@ -4,6 +4,7 @@ var gutil = require('gulp-util');
 var through2 = require('through2');
 var css = require('css');
 var changeCase = require('change-case');
+var assign = require('object-assign');
 
 var PluginError = gutil.PluginError;
 var less = accord.load('less');
@@ -13,6 +14,15 @@ var less = accord.load('less');
 // One you can require into your scripts
 // I suppose it depends on how you want to handle it
 module.exports = function (options) {
+
+    options = assign({
+        format: 'js'
+    }, options);
+    
+    // lowercase the format just because
+    options.format = options.format.toLowerCase();
+
+    validateOptions(options);
 
     return through2.obj(function (file, enc, callback) {
 
@@ -25,7 +35,7 @@ module.exports = function (options) {
         }
 
         var contentsStr = file.contents.toString();
-        
+
         // replace all comments with empty string
         contentsStr = contentsStr.replace(/(\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/)|(\/\/.*)/g, '');
 
@@ -76,14 +86,37 @@ module.exports = function (options) {
                 colorResource[changeCase.camel(kvp.key)] = kvp.value;
             });
 
+            // TODO:
+
             var name = changeCase.camel(filename);
-            var result = ['var ', name, 'Resource = ', JSON.stringify(colorResource, null, 4), ';'].join('');
 
-            file.contents = new Buffer(result);
+            var result;
 
-            // TODO: Maybe we can have an option that let's you output to .ts?
-            // though you could just do a file manipulation on it after the task is complete to complete that
-            file.path = gutil.replaceExtension(file.path, '.js');
+            switch (options.format) {
+
+                case 'js':
+                case '.js':
+                case 'javascript':
+                    result = generateForJavascript(name, colorResource);
+                    break;
+
+                case 'ts':
+                case '.ts':
+                case 'typescript':
+                    result = generateForTypescript(name, colorResource);
+                    break;
+
+                case 'coffee':
+                case '.coffee':
+                case 'coffeescript':
+                    result = generateForCoffeescript(name, colorResource);
+                    break;
+            }
+
+
+
+            file.contents = new Buffer(result.contents);
+            file.path = gutil.replaceExtension(file.path, result.fileExt);
 
             return file;
         }).then(function (file) {
@@ -94,4 +127,31 @@ module.exports = function (options) {
         }).done(undefined, callback);
     });
 
+    function generateForJavascript(variableName, colorResource) {
+
+        var contents = ['var ', variableName, 'Resource = ', JSON.stringify(colorResource, null, 4), ';'].join('');
+        return {fileExt: '.js', contents: contents};
+    }
+
+    function generateForTypescript(variableName, colorResource) {
+        var contents = ['var ', variableName, 'Resource : any = ', JSON.stringify(colorResource, null, 4), ';'].join('');
+        return {fileExt: '.ts', contents: contents};
+    }
+
+    function generateForCoffeescript(variableName, colorResource) {
+        // TODO: Fill this in
+    }
+
+    function validateOptions(options) {
+
+        // TODO: if more options are added, make sure to validate all of them before throwing the error
+        if (['js', '.js', 'javascript',
+                'ts', '.ts', 'typescript',
+                'coffee', '.coffee', 'coffeescript']
+                .indexOf(options.format) < 0) {
+            throw new PluginError('gulp-less-branding-js', 'Format \'' + options.format + '\' not supported.');
+        }
+    }
 }
+
+
