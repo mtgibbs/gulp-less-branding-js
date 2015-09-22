@@ -14,7 +14,18 @@ npm install gulp-less-branding-js
 
 ## Usage
 
-(Incomplete)
+```js
+var gulp = require('gulp');
+var glbj = require('gulp-less-branding-js');
+
+gulp.task('branding', function(){
+  gulp.src('./_branding.less')
+  .pipe(glbj())
+  .pipe(gulp.dest('build'));
+});
+
+gulp.task('default', ['branding']);
+```
 
 ## Example
 
