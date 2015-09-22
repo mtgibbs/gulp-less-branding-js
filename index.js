@@ -24,8 +24,14 @@ module.exports = function (options) {
             return callback(new PluginError('gulp-less-branding-js', 'Streaming not supported.'));
         }
 
-        var variableRegex = /(@[A-Za-z0-9\-_]+)(?=:)/g;
+        // /\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/
+
         var contentsStr = file.contents.toString();
+
+        // replace all comments with empty string
+        contentsStr = contentsStr.replace(/(\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/)|(\/\/.*)/g, '');
+
+        var variableRegex = /(@[A-Za-z0-9\-_]+)(?=:)/g;
         var variables = contentsStr.match(variableRegex).map(function (obj) {
             return obj.slice(1);
         });
