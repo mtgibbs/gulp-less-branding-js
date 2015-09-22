@@ -137,7 +137,16 @@ module.exports = function (options) {
     }
 
     function generateForCoffeescript(variableName, colorResource) {
-        // TODO: Fill this in
+
+        var contents = [variableName, "Resource =\n"].join('');
+
+        // DISCLAIMER: I DON'T ACTUALLY WORK IN COFFEESCRIPT EVER
+
+        for (var k in colorResource) {
+            contents = [contents,'  ', k, ': "', colorResource[k], '"', '\n'].join('');
+        }
+
+        return {fileExt: '.coffee', contents: contents};
     }
 
     function validateOptions(options) {
