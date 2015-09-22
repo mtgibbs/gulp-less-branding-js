@@ -118,4 +118,30 @@ describe('gulp-less-branding-js', function () {
             stream.end();
         });
     });
+
+    describe('brandingToJS({format: "coffee"}) - Branding to CoffeeScript', function () {
+        it('should compile a _branding.less to _branding.coffee', function (done) {
+            var brandingFile = createVinyl('_branding.less');
+
+            var stream = brandingToJS({format: 'coffee'});
+            stream.once('data', function (output) {
+
+                //console.log(output);
+                should.exist(output);
+                should.exist(output.path);
+                should.exist(output.relative);
+                should.exist(output.contents);
+
+                // clean new line characters for windows compat
+                var singleLineContents = output.contents.toString().replace(/\r?\n/g, '');
+                var expected = fs.readFileSync(path.join(__dirname, 'expect/_branding.ts'), 'utf8').replace(/\r?\n/g, '');
+
+                String(singleLineContents).should.equal(expected);
+
+                done();
+            });
+            stream.write(brandingFile);
+            stream.end();
+        });
+    });
 });
