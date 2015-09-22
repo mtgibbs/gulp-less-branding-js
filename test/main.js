@@ -18,7 +18,7 @@ function createVinyl(brandingFileName, contents) {
 
 
 describe('gulp-less-branding-js', function () {
-    describe('brandingToJS()', function () {
+    describe('brandingToJS() - Branding to Javascript', function () {
 
         it('should compile a _branding.less to _branding.js', function (done) {
             var brandingFile = createVinyl('_branding.less');
@@ -83,6 +83,32 @@ describe('gulp-less-branding-js', function () {
                 // clean new line characters for windows compat
                 var singleLineContents = output.contents.toString().replace(/\r?\n/g, '');
                 var expected = fs.readFileSync(path.join(__dirname, 'expect/_hasExistingClass.js'), 'utf8').replace(/\r?\n/g, '');
+
+                String(singleLineContents).should.equal(expected);
+
+                done();
+            });
+            stream.write(brandingFile);
+            stream.end();
+        });
+    });
+
+    describe('brandingToJS({format: "ts"}) - Branding to Typescript', function () {
+        it('should compile a _branding.less to _branding.ts', function (done) {
+            var brandingFile = createVinyl('_branding.less');
+
+            var stream = brandingToJS({format: 'ts'});
+            stream.once('data', function (output) {
+
+                //console.log(output);
+                should.exist(output);
+                should.exist(output.path);
+                should.exist(output.relative);
+                should.exist(output.contents);
+
+                // clean new line characters for windows compat
+                var singleLineContents = output.contents.toString().replace(/\r?\n/g, '');
+                var expected = fs.readFileSync(path.join(__dirname, 'expect/_branding.ts'), 'utf8').replace(/\r?\n/g, '');
 
                 String(singleLineContents).should.equal(expected);
 
