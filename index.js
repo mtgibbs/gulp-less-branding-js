@@ -18,7 +18,7 @@ module.exports = function (options) {
     options = assign({
         format: 'js'
     }, options);
-    
+
     // lowercase the format just because
     options.format = options.format.toLowerCase();
 
@@ -113,8 +113,6 @@ module.exports = function (options) {
                     break;
             }
 
-
-
             file.contents = new Buffer(result.contents);
             file.path = gutil.replaceExtension(file.path, result.fileExt);
 
@@ -134,7 +132,7 @@ module.exports = function (options) {
     }
 
     function generateForTypescript(variableName, colorResource) {
-        var contents = ['var ', variableName, 'Resource : any = ', JSON.stringify(colorResource, null, 4), ';'].join('');
+        var contents = ['var ', variableName, 'Resource:any = ', JSON.stringify(colorResource, null, 4), ';'].join('');
         return {fileExt: '.ts', contents: contents};
     }
 
