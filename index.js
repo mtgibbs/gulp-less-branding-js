@@ -24,10 +24,8 @@ module.exports = function (options) {
             return callback(new PluginError('gulp-less-branding-js', 'Streaming not supported.'));
         }
 
-        // /\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/
-
         var contentsStr = file.contents.toString();
-
+        
         // replace all comments with empty string
         contentsStr = contentsStr.replace(/(\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/)|(\/\/.*)/g, '');
 
