@@ -1,3 +1,7 @@
+### 0.0.5
+
+- Fixed the interface mismatch for typescript output
+
 ### 0.0.4
 
 - Changed the way .ts files generated.  Typescript resources now generate in Pascal case since Typescript seems to follow a more C# approach.
