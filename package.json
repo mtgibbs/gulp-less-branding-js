@@ -1,6 +1,6 @@
 {
   "name": "gulp-less-branding-js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Gulp plugin to compile a branding .less file into a branding .js for theming client-side charting or animations.",
   "main": "index.js",
   "scripts": {
