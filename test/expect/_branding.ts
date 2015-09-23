@@ -1,13 +1,13 @@
 var brandingResource:IBrandingResource = {
-    "brandDark": "#333333",
-    "grayDarkest": "#333333",
-    "grayDark": "#4d4d4d",
-    "gray": "#999999",
-    "grayLight": "#bfbfbf",
-    "grayLightest": "#e5e5e5",
-    "brandWhite": "#ffffff",
-    "brandPrimary": "purple",
-    "brandPrimaryLightened": "#c7a1c7"
+    "BrandDark": "#333333",
+    "GrayDarkest": "#333333",
+    "GrayDark": "#4d4d4d",
+    "Gray": "#999999",
+    "GrayLight": "#bfbfbf",
+    "GrayLightest": "#e5e5e5",
+    "BrandWhite": "#ffffff",
+    "BrandPrimary": "purple",
+    "BrandPrimaryLightened": "#c7a1c7"
 };
 
 interface IBrandingResource {
