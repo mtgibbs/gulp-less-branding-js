@@ -132,7 +132,18 @@ module.exports = function (options) {
     }
 
     function generateForTypescript(variableName, colorResource) {
-        var contents = ['var ', variableName, 'Resource:any = ', JSON.stringify(colorResource, null, 4), ';'].join('');
+
+        var interfaceName = ['I', changeCase.pascal(variableName), 'Resource'].join('');
+        var contents = ['var ', variableName, 'Resource:', interfaceName, ' = '
+                        , JSON.stringify(colorResource, null, 4), ';\n\n',
+                        'interface ', interfaceName, ' {\n'].join('');
+
+        for (var k in colorResource) {
+            var type = isNaN(colorResource[k]) ? 'string' : 'number';
+            contents = [contents, '    ', changeCase.pascal(k), ': ', type, ';\n'].join('');
+        }
+        contents = [contents, '}\n'].join('');
+
         return {fileExt: '.ts', contents: contents};
     }
 
@@ -160,5 +171,3 @@ module.exports = function (options) {
         }
     }
 }
-
-
