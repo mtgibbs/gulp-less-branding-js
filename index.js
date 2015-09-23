@@ -151,12 +151,10 @@ module.exports = function (options) {
     // DISCLAIMER: I DON'T ACTUALLY WORK IN COFFEESCRIPT EVER
     function generateForCoffeescript(variableName, colorKvps) {
 
-        var contents = [variableName, "Resource =\n"].join('');
-
-        colorKvps.forEach(function(kvp) {
-            contents = [contents,'  ', changeCase.camel(kvp.key), ': "', kvp.value, '"', '\n'].join('');
+        var props = colorKvps.map(function(kvp) {
+            return ['  ', changeCase.camel(kvp.key), ': "', kvp.value, '"', '\n'].join('');
         });
-
+        var contents = [variableName, "Resource =\n"].concat(props).join('');
         return {fileExt: '.coffee', contents: contents};
     }
 
