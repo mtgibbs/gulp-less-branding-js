@@ -81,13 +81,6 @@ module.exports = function (options) {
                     }
                 });
 
-            var colorResource = {};
-            colorKvps.forEach(function (kvp) {
-                colorResource[changeCase.camel(kvp.key)] = kvp.value;
-            });
-
-            // TODO:
-
             var name = changeCase.camel(filename);
 
             var result;
@@ -97,19 +90,19 @@ module.exports = function (options) {
                 case 'js':
                 case '.js':
                 case 'javascript':
-                    result = generateForJavascript(name, colorResource);
+                    result = generateForJavascript(name, colorKvps);
                     break;
 
                 case 'ts':
                 case '.ts':
                 case 'typescript':
-                    result = generateForTypescript(name, colorResource);
+                    result = generateForTypescript(name, colorKvps);
                     break;
 
                 case 'coffee':
                 case '.coffee':
                 case 'coffeescript':
-                    result = generateForCoffeescript(name, colorResource);
+                    result = generateForCoffeescript(name, colorKvps);
                     break;
             }
 
@@ -125,14 +118,22 @@ module.exports = function (options) {
         }).done(undefined, callback);
     });
 
-    function generateForJavascript(variableName, colorResource) {
+    function generateForJavascript(variableName, colorKvps) {
 
+        var colorResource = {};
+        colorKvps.forEach(function (kvp) {
+            colorResource[changeCase.camel(kvp.key)] = kvp.value;
+        });
         var contents = ['var ', variableName, 'Resource = ', JSON.stringify(colorResource, null, 4), ';'].join('');
         return {fileExt: '.js', contents: contents};
     }
 
-    function generateForTypescript(variableName, colorResource) {
+    function generateForTypescript(variableName, colorKvps) {
 
+        var colorResource = {};
+        colorKvps.forEach(function (kvp) {
+            colorResource[changeCase.pascal(kvp.key)] = kvp.value;
+        });
         var interfaceName = ['I', changeCase.pascal(variableName), 'Resource'].join('');
         var contents = ['var ', variableName, 'Resource:', interfaceName, ' = '
                         , JSON.stringify(colorResource, null, 4), ';\n\n',
@@ -147,15 +148,14 @@ module.exports = function (options) {
         return {fileExt: '.ts', contents: contents};
     }
 
-    function generateForCoffeescript(variableName, colorResource) {
+    // DISCLAIMER: I DON'T ACTUALLY WORK IN COFFEESCRIPT EVER
+    function generateForCoffeescript(variableName, colorKvps) {
 
         var contents = [variableName, "Resource =\n"].join('');
 
-        // DISCLAIMER: I DON'T ACTUALLY WORK IN COFFEESCRIPT EVER
-
-        for (var k in colorResource) {
-            contents = [contents,'  ', k, ': "', colorResource[k], '"', '\n'].join('');
-        }
+        colorKvps.forEach(function(kvp) {
+            contents = [contents,'  ', changeCase.camel(kvp.key), ': "', kvp.value, '"', '\n'].join('');
+        });
 
         return {fileExt: '.coffee', contents: contents};
     }
