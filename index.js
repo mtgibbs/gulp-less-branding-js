@@ -138,8 +138,10 @@ module.exports = function (options) {
         colorKvps.forEach(function (kvp) {
             colorResource[changeCase.camel(kvp.key)] = kvp.value;
         });
-        var contents = JSON.stringify(colorResource, null, 4);
-        return {fileExt: '.json', contents: contents};
+        var contents = {};
+        contents[variableName] = colorResource;
+
+        return {fileExt: '.json', contents: JSON.stringify(contents, null, 4)};
     }
 
     function generateForTypescript(variableName, colorKvps) {
