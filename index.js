@@ -92,7 +92,11 @@ module.exports = function (options) {
                 case 'javascript':
                     result = generateForJavascript(name, colorKvps);
                     break;
-
+                case 'json':
+                case '.json':
+                case 'JSON':
+                    result = generateForJSON(name, colorKvps);
+                    break;
                 case 'ts':
                 case '.ts':
                 case 'typescript':
@@ -126,6 +130,18 @@ module.exports = function (options) {
         });
         var contents = ['var ', variableName, 'Resource = ', JSON.stringify(colorResource, null, 4), ';'].join('');
         return {fileExt: '.js', contents: contents};
+    }
+
+    function generateForJSON(variableName, colorKvps) {
+
+        var colorResource = {};
+        colorKvps.forEach(function (kvp) {
+            colorResource[changeCase.camel(kvp.key)] = kvp.value;
+        });
+        var contents = {};
+        contents[variableName] = colorResource;
+
+        return {fileExt: '.json', contents: JSON.stringify(contents, null, 4)};
     }
 
     function generateForTypescript(variableName, colorKvps) {
@@ -162,6 +178,7 @@ module.exports = function (options) {
 
         // TODO: if more options are added, make sure to validate all of them before throwing the error
         if (['js', '.js', 'javascript',
+                'json', '.json', 'JSON',
                 'ts', '.ts', 'typescript',
                 'coffee', '.coffee', 'coffeescript']
                 .indexOf(options.format) < 0) {
