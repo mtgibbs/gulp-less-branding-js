@@ -1,3 +1,7 @@
+### 0.0.6
+
+- Added support for outputting .json files
+
 ### 0.0.5
 
 - Fixed the interface mismatch for typescript output
