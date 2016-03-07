@@ -64,10 +64,6 @@ var brandingResource = {
 
 Then just pipe the output into your minification/bundling workflow to be used as a global branding dictionary.
 
-### TODO
-
-- An option to just output a .json file to be required into something that you're using (not sure the use case for this, but it sounds alright)
-
 ## License
 
 MIT
